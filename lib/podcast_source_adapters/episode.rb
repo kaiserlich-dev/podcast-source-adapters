@@ -1,10 +1,11 @@
 module PodcastSourceAdapters
   Episode = Data.define(
     :canonical_id, :provider, :provider_id, :feed_id, :guid, :title,
-    :description, :audio_url, :web_url, :published_at, :duration_seconds
+    :description, :audio_url, :web_url, :published_at, :duration_seconds,
+    :show_title, :feed_url
   ) do
-    def initialize(**attributes)
-      super(**attributes.freeze)
+    def initialize(show_title: nil, feed_url: nil, **attributes)
+      super(show_title:, feed_url:, **attributes.freeze)
       raise ArgumentError, "canonical_id is required" if canonical_id.to_s.empty?
       raise ArgumentError, "title is required" if title.to_s.empty?
       raise ArgumentError, "audio_url must be HTTP(S)" unless audio_url.to_s.match?(%r{\Ahttps?://}i)

@@ -48,7 +48,8 @@ module PodcastSourceAdapters
         provider_id = item.fetch("id").to_s
         Episode.new(
           canonical_id: "podcast_index:#{provider_id}", provider: "podcast_index", provider_id:,
-          feed_id: item["feedId"]&.to_s || item["feedUrl"], guid: item["guid"],
+          feed_id: item["feedId"]&.to_s, guid: item["guid"],
+          show_title: item["feedTitle"], feed_url: item["feedUrl"],
           title: item.fetch("title"), description: item["description"].to_s,
           audio_url: item.fetch("enclosureUrl"), web_url: item["link"],
           published_at: parse_time(item["datePublished"]), duration_seconds: item["duration"]&.to_i

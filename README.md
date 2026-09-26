@@ -11,6 +11,8 @@ source.each_episode { |episode| puts [episode.canonical_id, episode.title] }
 
 All adapters accept an injectable `transport:` callable for deterministic tests. The default transport retries transient transport errors and HTTP 429/5xx responses with bounded exponential delay. It never retries authentication or malformed-response failures.
 
+Each immutable `Episode` exposes provider-scoped `provider_id` and `feed_id` values alongside normalized `show_title` and `feed_url` metadata. The show fields default to `nil` so constructors written against versions before 0.2 remain valid. Cross-provider or sibling-episode deduplication remains an application policy.
+
 Provider credentials:
 
 - Taddy: `user_id:` and `api_key:` become `X-USER-ID` and `X-API-KEY`.

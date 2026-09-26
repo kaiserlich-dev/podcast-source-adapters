@@ -6,7 +6,7 @@ module PodcastSourceAdapters
         query($term: String!, $page: Int!, $limit: Int!) {
           search(term: $term, filterForTypes: PODCASTEPISODE, matchBy: EXACT_PHRASE,
             page: $page, limitPerPage: $limit) {
-            searchId responseDetails { pagesCount }
+            searchId responseDetails { id type totalCount pagesCount }
             podcastEpisodes { uuid name description datePublished duration audioUrl websiteUrl guid
               podcastSeries { uuid name rssUrl } }
           }
@@ -28,7 +28,7 @@ module PodcastSourceAdapters
           page = 1
           loop do
             search = fetch(term, page)
-            pages = Integer(search.dig("responseDetails", "pagesCount"))
+            pages = pages_count(search)
             raise ResponseError, "Taddy result exceeds page limit #{@page_limit}" if pages > @page_limit
             Array(search["podcastEpisodes"]).each do |item|
               episode = normalize(item)
@@ -59,13 +59,27 @@ module PodcastSourceAdapters
         series = item.fetch("podcastSeries")
         Episode.new(
           canonical_id: "taddy:#{provider_id}", provider: "taddy", provider_id:,
-          feed_id: series["uuid"] || series["rssUrl"], guid: item["guid"], title: item.fetch("name"),
+          feed_id: series["uuid"], guid: item["guid"], title: item.fetch("name"),
+          show_title: series["name"], feed_url: series["rssUrl"],
           description: item["description"].to_s, audio_url: item.fetch("audioUrl"),
           web_url: item["websiteUrl"], published_at: Time.parse(item["datePublished"].to_s),
           duration_seconds: item["duration"]&.to_i
         )
       rescue ArgumentError => error
         raise ResponseError, "Invalid Taddy episode: #{error.message}"
+      end
+
+      def pages_count(search)
+        details = search["responseDetails"]
+        raise ResponseError, "Taddy responseDetails must be an array" unless details.is_a?(Array)
+
+        episode_details = details.find { |detail| detail["type"] == "PODCASTEPISODE" }
+        episode_details ||= details.first if details.one?
+        raise ResponseError, "Missing Taddy podcast episode pagination" unless episode_details
+
+        Integer(episode_details.fetch("pagesCount"))
+      rescue KeyError, TypeError, ArgumentError
+        raise ResponseError, "Missing Taddy podcast episode pagination"
       end
     end
   end

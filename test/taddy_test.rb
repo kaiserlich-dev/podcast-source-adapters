@@ -13,5 +13,8 @@ class TaddyTest < Minitest::Test
     assert_equal %w[taddy:episode-a taddy:episode-b], episodes.map(&:canonical_id)
     assert_equal [ 1, 2 ], transport.requests.map { |request| JSON.parse(request.fetch(:body)).dig("variables", "page") }
     assert transport.requests.all? { |request| request.fetch(:headers).fetch("X-USER-ID") == "user" }
+    assert_equal "series-a", episodes.first.feed_id
+    assert_equal "Taddy Show", episodes.first.show_title
+    assert_equal "https://show.example/feed.xml", episodes.first.feed_url
   end
 end

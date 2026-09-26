@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = "podcast_source_adapters"
-  spec.version = "0.1.1"
+  spec.version = "0.2.0"
   spec.summary = "Provider-neutral podcast discovery adapters"
   spec.authors = [ "Kaiserlich" ]
   spec.required_ruby_version = ">= 3.2"

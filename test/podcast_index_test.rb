@@ -13,6 +13,9 @@ class PodcastIndexTest < Minitest::Test
     episode = episodes.first
     request = transport.requests.first
     assert_equal "podcast_index:42", episode.canonical_id
+    assert_equal "7", episode.feed_id
+    assert_equal "Indexed Show", episode.show_title
+    assert_equal "https://index.example/feed.xml", episode.feed_url
     assert_equal Digest::SHA1.hexdigest("keysecret123"), request.fetch(:headers).fetch("Authorization")
     assert_includes request.fetch(:url), "q=person"
   end

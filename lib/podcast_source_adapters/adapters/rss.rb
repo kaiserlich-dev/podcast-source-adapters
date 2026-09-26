@@ -20,6 +20,7 @@ module PodcastSourceAdapters
           yield Episode.new(
             canonical_id: Identity.rss(guid:, audio_url:), provider: "rss", provider_id: nil,
             feed_id: @url, guid: guid.empty? ? nil : guid, title: item.title.to_s.strip,
+            show_title: feed.channel.title.to_s.strip, feed_url: @url,
             description: plain_text(item.description), audio_url:, web_url: item.link,
             published_at: item.pubDate, duration_seconds: duration(item)
           )
