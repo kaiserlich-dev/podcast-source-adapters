@@ -1,4 +1,4 @@
 <?xml version="1.0"?><rss version="2.0"><channel><title>Example</title><link>https://pod.example</link><description>Fixture</description>
-<item><guid>stable-episode-1</guid><title>Evidence and recovery</title><description><![CDATA[<p>A practical discussion.</p>]]></description><link>https://pod.example/episodes/1</link><pubDate>Tue, 01 Sep 2026 10:00:00 GMT</pubDate><enclosure url="https://cdn.example/one.mp3?token=old" type="audio/mpeg"/></item>
+<item><guid>stable-episode-1</guid><title>Evidence and recovery</title><description><![CDATA[<p>A <strong>practical <em>discussion</em></strong> &amp; recovery.</p><p>Next&nbsp;line.</p>]]></description><link>https://pod.example/episodes/1</link><pubDate>Tue, 01 Sep 2026 10:00:00 GMT</pubDate><enclosure url="https://cdn.example/one.mp3?token=old" type="audio/mpeg"/></item>
 <item><title>Fallback identity</title><enclosure url="HTTPS://CDN.Example/two.mp3?token=one" type="audio/mpeg"/></item>
 </channel></rss>

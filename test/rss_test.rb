@@ -8,7 +8,16 @@ class RssTest < Minitest::Test
     assert_equal 2, episodes.size
     assert_equal "rss:guid:#{Digest::SHA256.hexdigest('stable-episode-1')}", episodes.first.canonical_id
     assert_equal "rss:enclosure:#{Digest::SHA256.hexdigest('https://cdn.example/two.mp3')}", episodes[1].canonical_id
-    assert_equal "A practical discussion.", episodes.first.description
     assert episodes.all?(&:frozen?)
+  end
+
+  def test_description_is_decoded_plain_text
+    transport = FixtureTransport.new(responses: [ fixture("feed.xml") ], requests: [])
+
+    episode = PodcastSourceAdapters::Adapters::Rss.new(
+      url: "https://show.example/feed", transport:
+    ).each_episode.first
+
+    assert_equal "A practical discussion & recovery. Next line.", episode.description
   end
 end

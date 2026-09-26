@@ -1,3 +1,4 @@
+require "cgi"
 require "digest"
 require "json"
 require "net/http"

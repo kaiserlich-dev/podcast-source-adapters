@@ -31,7 +31,8 @@ module PodcastSourceAdapters
       private
 
       def plain_text(value)
-        value.to_s.gsub(/<[^>]+>/, " ").gsub(/\s+/, " ").strip
+        html = value.to_s.gsub(/<[^>]+>/, " ").gsub(/&nbsp;/i, "\u00A0")
+        CGI.unescapeHTML(html).gsub(/[[:space:]]+/, " ").strip
       end
 
       def duration(item)
